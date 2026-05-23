@@ -1,0 +1,4 @@
+Sun is a star
+Moon is 3,84,000km away
+Sun is 15,00,00,000km away
+Coding was invented by Ada Lovelace

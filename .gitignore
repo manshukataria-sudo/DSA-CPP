@@ -1,0 +1,5 @@
+# Executables
+*.exe
+
+# user settings
+*.vscode
