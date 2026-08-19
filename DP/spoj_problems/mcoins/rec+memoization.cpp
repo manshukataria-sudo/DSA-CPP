@@ -1,52 +1,47 @@
+#include <climits>
 #include <iostream>
 #include <vector>
 using namespace std;
-vector<int> dp;
-int f(int K, int L, int m, char turn) {
-    if (m == 0 || m == 1 || m == K || m == L) {
-        return 1;
+vector<char> dp;
+char f(int coins, int K, int L) {
+    if (coins == 1 || coins == K || coins == L) {
+        return 'w';
     }
-    if (dp[m] != -1) {
-        if (dp[m] == 0) {
-            if (turn == 'A') {
-                return 'B';
-            } else {
-                return 'A';
-            }
-        } else {
-            return turn;
-        }
+    if (dp[coins] != 'u') {
+        return dp[coins];
     }
-    (turn == 'A') ? turn = 'B' : turn = 'A';
-    int win1, win2, win3;
-    if (m - 1 >= 0) {
-        dp[m - 1] = win1 = f(K, L, m - 1, turn);
-    }
-    if (m - K >= 0) {
-        dp[m - K] = win2 = f(K, L, m - K, turn);
-    }
-    if (m - L >= 0) {
-        dp[m - L] = win3 = f(K, L, m - L, turn);
-    }
-    if (win1 == 1 || win2 == 1 || win3 == 1) {
-        return dp[m] = 1;
+    char st1, st2, st3;
+    (coins - 1 > 0) ? st1 = f(coins - 1, K, L) : st1 = 'u';
+    (coins - K > 0) ? st2 = f(coins - K, K, L) : st2 = 'u';
+    (coins - L > 0) ? st3 = f(coins - L, K, L) : st3 = 'u';
+    if (st1 == 'l' || st2 == 'l' || st3 == 'l') {
+        return dp[coins] = 'w';
     } else {
-        return dp[m] = 0;
+        return dp[coins] = 'l';
     }
 }
 int main() {
-    int K, L, m;  // boy can pick 1, K or L coins in one turn
-    cin >> K >> L;
-    // vector<int> coins(m);
-    cout << "Enter the no. of coins : ";
-    cin >> m;
-    dp.resize(m + 1, -1);
-    // for (int i = 0; i < m; i++) {
-    //     cin >> coins[i];
-    // }
-    if (f(K, L, m, 'A')) {
-        cout << 'A';
-    } else {
-        cout << 'B';
+    int K, L, m;
+    cin >> K >> L >> m;
+    vector<int> games(m);
+    for (int i = 0; i < m; i++) {
+        cin >> games[i];
     }
+    int maxEle = INT_MIN;
+    for (int ele : games) {
+        maxEle = max(ele, maxEle);
+    }
+    dp.resize(maxEle + 1, 'u');
+    string ans = "";
+    for (int ele : games) {
+        ans += f(ele, K, L);
+    }
+    for (int i = 0; i < ans.size(); i++) {
+        if (ans[i] == 'w') {
+            ans[i] = 'A';
+        } else {
+            ans[i] = 'B';
+        }
+    }
+    cout << ans << "\n";
 }
