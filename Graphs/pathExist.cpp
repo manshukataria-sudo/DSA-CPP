@@ -1,8 +1,10 @@
 #include <iostream>
 #include <list>
+#include <unordered_set>
 #include <vector>
 using namespace std;
 vector<list<int>> graph;
+unordered_set<int> visited;
 void display() {
     for (int i = 0; i < graph.size(); i++) {
         cout << i;
@@ -12,16 +14,34 @@ void display() {
         cout << "\n";
     }
 }
-vector<bool> visited;
+
+// using the vector<bool> as visited array
+// vector<bool> visited;
+// bool path_exists(int src, int dest) {
+//     visited[src] = true;
+//     for (auto ele : graph[src]) {
+//         if (visited[ele]) {
+//             continue;
+//         }
+//         if (ele == dest || path_exists(ele, dest)) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
 bool path_exists(int src, int dest) {
-    visited[src] = true;
+    if (src == dest) {
+        return true;
+    }
+    visited.insert(src);
     for (auto ele : graph[src]) {
-        if (visited[ele]) {
+        if (visited.find(ele) != visited.end()) {
             continue;
         }
-        if (ele == dest || path_exists(ele, dest)) {
+        if (path_exists(ele, dest)) {
             return true;
-        }
+        };
     }
     return false;
 }
@@ -34,10 +54,10 @@ int main() {
     graph[4] = {2, 3, 5};
     graph[5] = {4};
 
-    visited.resize(graph.size());
+    // visited.resize(graph.size());
 
     display();
     cout << "\n";
 
-    cout << path_exists(5, 0) << "\n";
+    cout << path_exists(3, 5) << "\n";
 }
